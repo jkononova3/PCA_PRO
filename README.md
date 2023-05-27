@@ -67,3 +67,10 @@ https://training.nih-cfde.org/en/latest/Bioinformatic-Analyses/GWAS-in-the-cloud
 
 ### How to use this tool?
 
+Once you have download this tool you have to run with this command:
+
+After cd'ing into your directory with the vcf file run this command.
+```
+python pca_1.py -f filename.vcf.gz
+```
+
