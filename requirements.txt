@@ -1,0 +1,5 @@
+The following python modules need to be installed for the script to be executed:
+
+numpy
+matplotlib
+pandas
