@@ -4,7 +4,7 @@
 Principal component analysis is is a popular dimensionality reduction method that can be used to analyze large datasets that contain a high number of dimensions per observation. PCA increases data interpretability by reducing the dataset’s dimensionality, and using the principal components to visualize this simplified data while minimizing information loss.
 This tool was designed to reduce the dimensionality of SNP genotypes. The output will be a scatterplot cluster graph of these SNP genotypes.  
 
-The pipeline includes taking a VCF.GZ-formatted file, performing clustering analysis of the variants, and outputting a scatterplot that displays the PCA-computed clusters of the genome. 
+The pipeline includes taking a vcf.gz-formatted file, performing clustering analysis of the variants, and outputting a scatterplot that displays the PCA-computed clusters of the genome. 
 
 ### How to install this tool?
 This script can be installed via the following command line prompts:  
@@ -17,14 +17,14 @@ This script can be installed via the following command line prompts:
 
 ### How to use this tool?
 
-Once the tool has been installed, change your working directory to the one containing your VCF.GZ file of interest.
+Once the tool has been installed, change your working directory to the one containing your vcf.gz file of interest.
 
 Execute the script from the command line as follows:
 ```
 python pca_1.py -f [filename.vcf.gz]
 ```
 
-### Detour: Installation and Usage of VCFTools
+### Detour: Installation and Usage of VCF Tools
 
 Documentation: 
 https://vcftools.sourceforge.net/man_latest.html
@@ -32,7 +32,7 @@ https://vcftools.sourceforge.net/man_latest.html
 Installation:
 https://training.nih-cfde.org/en/latest/Bioinformatic-Analyses/GWAS-in-the-cloud/vcftools_install/
 
-We used VCFTools to convert our VCF File into 3 different files 
+We used VCF Tools to convert our vcf.gz File into 3 different files 
 1) .012 - Is a matrix of all the genotypes of individuals with one individual per line and each allele represented by 0, 1, or 2
 2) .012.indv - Is a file detailing all individuals in the main file
 3) .012.pos - Is a file with all the positions in the main file
