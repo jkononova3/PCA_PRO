@@ -22,35 +22,67 @@ output, error = process.communicate()
 command = 'cd matrix_files'
 process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
+
 # Read in file for VCF tools 012 genotype matrix
-# data = pd.read_table("C:\\Users\\Julia Kononova\\Downloads\\matrix.012")
+# data = pd.read_table("C:\\Users\\Julia Kononova\\Downloads\\matrix.012") -- don't mind this LOL
 data = pd.read_table("matrix.012")
-#data.head()
 
+data = data.values
+data = data[:,1:]
+# print(data)
 
-# from sklearn.decomposition import PCA
-import sklearn.decomposition
-pca = sklearn.decomposition.PCA()
-pca.fit(data)
+# STEP 1: Scale/standardize data by Z-normalizing SNPs (helps reduce effects of rare SNPs)
+# normalize by row, using average and standard deviation
+mean_val = data.mean(axis=0)
+stand_dev = data.std(axis=0)
 
-pc_magnitudes = pca.explained_variance_
-pcs = pca.components_
-print("PC 1 - magnitude: %s"%pc_magnitudes[0])
-print("PC 1: %s"%pcs[0])
-print("PC 2 - magnitude: %s"%pc_magnitudes[1])
-print("PC 2: %s"%pcs[1])
+# normalized data has mean = 0, variance of each SNP = 1
+data_norm = (data-mean_val)/stand_dev
 
-# Project data onto top PCs:
+# STEP 2: Calc covariance matrix
+features = data_norm.T # transposes data array (interchange rows and cols)
+covar_matrix = np.cov(features)
 
-# Using sklearn transform method
-data_transformed_sklearn = pca.transform(data)
+#print("array preview: ")
+#print(covar_matrix[0:5, 0:5])
 
-# Compare
-#fig = plt.figure()
-#ax = fig.add_subplot(111)
-plt.scatter(data_transformed_sklearn[:,0], data_transformed_sklearn[:,1])
-plt.xlabel("PC1")
-plt.ylabel("PC2")
+# STEP 3: Eigendecomposition of covariance matrix
+eig_values, eig_vectors = np.linalg.eig(covar_matrix)
+
+# Adjust eigenvectors with largest magnitudes (abs val) to be positive
+max_rows_idx = np.argmax(np.abs(eig_vectors), axis=0) # get indices of maximum rows
+signs = np.sign(eig_vectors[max_rows_idx, range(eig_vectors.shape[0])]) # get sign of each element in the max rows
+eig_vectors = eig_vectors*signs[np.newaxis,:] # add new dimension with transformed signs
+eig_vectors = eig_vectors.T # transpose
+
+#print('Eigenvalues \n', eig_values)
+#print('Eigenvectors \n', eig_vectors)
+
+# STEP 4: Rearrange the eigenvectors and eigenvalues
+
+# make list of matched eigenvalue-eigenvector pairings, stored as tuples
+eig_pairs = [(np.abs(eig_values[i]), eig_vectors[i,:]) for i in range(len(eig_values))]
+# sort tuples in decreasing order based on eigenvalues' magnitude
+eig_pairs.sort(key=lambda x: x[0], reverse=True)
+
+# store as separate variables, for the purpose of testing validation + additional calculations we might want to perform later
+eig_values_sorted = np.array([x[0] for x in eig_pairs])
+eig_vectors_sorted = np.array([x[1] for x in eig_pairs])
+
+# print(eig_pairs)
+
+# STEP 5: Choose principal components (using any given number, using 5 here as default, for testing purposes)
+num_components = 5 # TODO: make customizable with parameter
+proj_matrix = eig_vectors_sorted[:num_components, :] # projection matrix
+
+# Step 6: Project the data, using the projection matrix to transform data to have its dimensions = num_components
+data_transformed = data_norm.dot(proj_matrix.T)
+
+# Plot the first 2 principal components
+plt.scatter(data_transformed[:, 0], data_transformed[:, 1])
+plt.xlabel('PC1'); plt.xticks([])
+plt.ylabel('PC2'); plt.yticks([])
+plt.title('First 2 PCA components')
 plt.show()
 
 sys.exit()
