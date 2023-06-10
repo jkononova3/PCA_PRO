@@ -1,30 +1,50 @@
-# Principal Component Analysis Documentation
+# PCA_PRO Documentation
 
 ### What is PCA?
-Principal component analysis is is a popular dimensionality reduction method that can be used to analyze large datasets that contain a high number of dimensions per observation. PCA increases data interpretability by reducing the dataset’s dimensionality, and using the principal components to visualize this simplified data while minimizing information loss.
-This tool was designed to reduce the dimensionality of SNP genotypes. The output will be a scatterplot cluster graph of these SNP genotypes.  
+PCA (Principal Component Analysis) is is a popular dimensionality reduction method that can be used to analyze large datasets that contain a high number of dimensions per observation. PCA increases data interpretability by reducing the dataset’s dimensionality, and using the principal components to visualize this simplified data while minimizing information loss.
+This tool was designed to reduce the dimensionality of SNP genotypes. 
 
-The pipeline includes taking a vcf.gz-formatted file, performing clustering analysis of the variants, and outputting a scatterplot that displays the PCA-computed clusters of the genome. 
-
-### How to install this tool?
+### Installation
 This script can be installed via the following command line prompts:  
 
 ```
-  git clone https://github.com/jkononova3/pca
-  cd pca
+  git clone https://github.com/jkononova3/PCA_PRO
+  cd PCA_PRO
   make
 ```
 
-### How to use this tool?
+### Usage
 
-Once the tool has been installed, change your working directory to the one containing your vcf.gz file of interest.
+Once the tool has been installed, change your working directory to the one containing your VCF file of interest.
 
 Execute the script from the command line as follows:
 ```
-python pca_1.py -f [filename.vcf.gz]
+python pca_pro.py -f [--file] -z [--gzipped] -n [--pc_num] -t [--tabs]
 ```
+## Input
 
-If you come upon an error that says you have missing (NaN) valus or INF values, use our pruning step to prune your data to get rid of those values. 
+An overview of the parameters:
+| Flag Name | Argument Name | Description                                                                                                                                                                                             |
+|-----------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -f        | --file        | This argument should be followed by the path to the VCF or gzipped VCF file. - If the file is located in your current working directory, a relative path can be used. Use an absolute path otherwise.   |
+| -z        | --gzipped     | The inclusion of this argument indicates that the input is a gzipped VCF file; omit if the VCF file is *not* gzipped.                                                                                   |
+| -n        | --pc_num      | This argument should be followed by the desired number of principal components to conduct PCA. If omitted, 20 principal components will be used by default.                                             |
+| -t        | --tabs        | The inclusion of this argument will produce a tab-delimited file of eigenvalues. If omitted, the eigenvalues file will be space-delimited by default.                                                   |
+
+## Output
+The script will generate a matrix_files folder in your working directory, containing the following matrix files:
+1) .012 - matrix of all the genotypes of individuals with one individual per line and each allele represented by 0, 1, or 2
+2) .012.indv - details all individuals in the main file
+3) .012.pos - contains all the positions in the main file
+
+Within the matrix_files folder, an additional eigen_values folder contains:
+1) eigenvectors.txt -- a text file containing all computed eigenvectors
+2) eigenvalues.txt -- a text file containing all computed eigenvalues
+3) projected.txt -- a text file containing the data transformed according to the PCA projection
+4) PC_1_v_2.png -- an image with the scatterplot displaying any correlation between principal components 1 and 2
+
+### Debugging
+If you come upon an error indicating that you have missing (NaN) valus or INF values, use our pruning step to prune your data to get rid of those values. 
 Execute the script from the command line as follows:
 ```
 python pruning.py -f [filename.vcf.gz]
@@ -40,10 +60,7 @@ https://vcftools.sourceforge.net/man_latest.html
 Installation:
 https://training.nih-cfde.org/en/latest/Bioinformatic-Analyses/GWAS-in-the-cloud/vcftools_install/
 
-We used VCF Tools to convert our vcf.gz File into 3 different files 
-1) .012 - Is a matrix of all the genotypes of individuals with one individual per line and each allele represented by 0, 1, or 2
-2) .012.indv - Is a file detailing all individuals in the main file
-3) .012.pos - Is a file with all the positions in the main file
+We used VCF Tools for the conversion from VCF to matrix files.
 
 __VCF is used to create a matrix for our PCA run.__
 
