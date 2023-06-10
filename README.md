@@ -24,6 +24,14 @@ Execute the script from the command line as follows:
 python pca_1.py -f [filename.vcf.gz]
 ```
 
+If you come upon an error that says you have missing (NaN) valus or INF values, use our pruning step to prune your data to get rid of those values. 
+Execute the script from the command line as follows:
+```
+python pruning.py -f [filename.vcf.gz]
+```
+This will return a pruned_data.vcf.gz file in a folder called pruned, please take this file out and put it in the same folder as the pca_1.py file. Now it should run without a hitch.
+
+
 ### Detour: Installation and Usage of VCF Tools
 
 Documentation: 
