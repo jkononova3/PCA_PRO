@@ -51,6 +51,8 @@ python pruning.py -f [filename.vcf.gz]
 ```
 This will return a pruned_data.vcf.gz file in a folder called pruned, please take this file out and put it in the same folder as the pca_1.py file. Now it should run without a hitch.
 
+For the pruning to work we used PLINK thus please make sure PLINK is installed whereever this script is running so you don't run into any major problems. We would also like to add that we have included the pruning steps as a jupyter notebook as well. If you are from CSE 185 and have access to the datahub it may be easier to use the notebook since the datahub already has PLINK access.
+
 
 ### Detour: Installation and Usage of VCF Tools
 
