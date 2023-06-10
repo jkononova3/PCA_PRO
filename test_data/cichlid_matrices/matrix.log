@@ -1,0 +1,15 @@
+
+VCFtools - 0.1.16
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--gzvcf chr_pruned_subset.vcf.gz
+	--012
+	--out matrix
+
+Using zlib version: 1.2.11
+Warning: Expected at least 2 parts in INFO entry: ID=PR,Number=0,Type=Flag,Description="Provisional reference allele, may not be based on real reference genome">
+After filtering, kept 16 out of 16 Individuals
+Writing 012 matrix files ... Done.
+After filtering, kept 95540 out of a possible 95540 Sites
+Run Time = 1.00 seconds
