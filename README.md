@@ -21,6 +21,10 @@ Execute the script from the command line as follows:
 ```
 python pca_pro.py -f [--file] -z [--gzipped] -n [--pc_num] -t [--tabs]
 ```
+Example:
+```
+python pca_pro.py -f gtdata_1000Genomes_pruned.vcf.gz -z -n 5 -t 
+```
 #### Input
 
 An overview of the parameters:
