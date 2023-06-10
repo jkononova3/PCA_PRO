@@ -4,6 +4,7 @@ import pandas as pd
 import subprocess
 import argparse
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import normalize
 
 # Read in user's input parameters
 parser = argparse.ArgumentParser()
@@ -38,13 +39,12 @@ else:
     command = 'vcftools --vcf ' + filename +' --012 --out matrix --temp matrix_files'
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
-# vcftools --gzvcf ~/Downloads/gtdata_1000Genomes_pruned.vcf.gz --012 --out matrix
+
 command = 'cd matrix_files'
 process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
 
 # Read in file for VCF tools 012 genotype matrix
-# data = pd.read_table("C:\\Users\\Julia Kononova\\Downloads\\matrix.012") -- don't mind this LOL
 data = pd.read_table("matrix.012")
 
 data = data.values
@@ -61,11 +61,11 @@ output, error = process.communicate()
 
 # STEP 1: Scale/standardize data by Z-normalizing SNPs (helps reduce effects of rare SNPs)
 # normalize by row, using average and standard deviation
-mean_val = data.mean(axis=0)
-stand_dev = data.std(axis=0)
+# mean_val = data.mean(axis=0)
+# stand_dev = data.std(axis=0)
 
 # normalized data has mean = 0, variance of each SNP = 1
-data_norm = (data-mean_val)/stand_dev
+data_norm = normalize(data)
 
 # STEP 2: Calc covariance matrix
 features = data_norm.T # transposes data array (interchange rows and cols)
@@ -83,9 +83,6 @@ signs = np.sign(eig_vectors[max_rows_idx, range(eig_vectors.shape[0])]) # get si
 eig_vectors = eig_vectors*signs[np.newaxis,:] # add new dimension with transformed signs
 eig_vectors = eig_vectors.T # transpose
 
-#print('Eigenvalues \n', eig_values)
-#print('Eigenvectors \n', eig_vectors)
-
 # STEP 4: Rearrange the eigenvectors and eigenvalues
 
 # make list of matched eigenvalue-eigenvector pairings, stored as tuples
@@ -96,8 +93,6 @@ eig_pairs.sort(key=lambda x: x[0], reverse=True)
 # store as separate variables, for the purpose of testing validation + additional calculations we might want to perform later
 eig_values_sorted = np.array([x[0] for x in eig_pairs])
 eig_vectors_sorted = np.array([x[1] for x in eig_pairs])
-
-# print(eig_pairs)
 
 # STEP 5: Choose principal components (using any given number, using 5 here as default, for testing purposes)
 # num_components = 5 # TODO: make customizable with parameter
