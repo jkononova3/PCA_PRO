@@ -107,11 +107,12 @@ proj_matrix = eig_vectors_sorted[:num_components, :] # projection matrix
 data_transformed = data_norm.dot(proj_matrix.T)
 
 # Plot the first 2 principal components
-plt.scatter(np.negative(data_transformed[:, 0]), np.negative(data_transformed[:, 1]))
+plt.scatter(np.negative(data_transformed[:, 0]), data_transformed[:, 1])
 plt.xlabel('PC1'); plt.xticks([])
 plt.ylabel('PC2'); plt.yticks([])
 plt.title('First 2 PCA components')
 plt.show()
+plt.savefig("PC_1_v_2")
 
 if(if_tab):
     np.savetxt("eigenvectors.txt",eig_vectors_sorted, delimiter='\t')
