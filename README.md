@@ -21,7 +21,7 @@ Execute the script from the command line as follows:
 ```
 python pca_pro.py -f [--file] -z [--gzipped] -n [--pc_num] -t [--tabs]
 ```
-## Input
+#### Input
 
 An overview of the parameters:
 | Flag Name | Argument Name | Description                                                                                                                                                                                             |
@@ -31,7 +31,7 @@ An overview of the parameters:
 | -n        | --pc_num      | This argument should be followed by the desired number of principal components to conduct PCA. If omitted, 20 principal components will be used by default.                                             |
 | -t        | --tabs        | The inclusion of this argument will produce a tab-delimited file of eigenvalues. If omitted, the eigenvalues file will be space-delimited by default.                                                   |
 
-## Output
+#### Output
 The script will generate a matrix_files folder in your working directory, containing the following matrix files:
 1) .012 - matrix of all the genotypes of individuals with one individual per line and each allele represented by 0, 1, or 2
 2) .012.indv - details all individuals in the main file
